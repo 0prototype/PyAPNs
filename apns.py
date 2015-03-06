@@ -195,7 +195,7 @@ class APNsConnection(object):
         _logger.debug("%s APNS connection establishing..." % self.__class__.__name__)
 
         # Fallback for socket timeout.
-        for i in xrange(3):
+        for i in range(3):
             try:
                 self._socket = socket(AF_INET, SOCK_STREAM)
                 self._socket.settimeout(self.timeout)
@@ -215,7 +215,7 @@ class APNsConnection(object):
                 try:
                     self._ssl.do_handshake()
                     break
-                except ssl.SSLError, err:
+                except ssl.SSLError as err:
                     if ssl.SSL_ERROR_WANT_READ == err.args[0]:
                         select.select([self._ssl], [], [])
                     elif ssl.SSL_ERROR_WANT_WRITE == err.args[0]:
@@ -225,11 +225,11 @@ class APNsConnection(object):
 
         else:
             # Fallback for 'SSLError: _ssl.c:489: The handshake operation timed out'
-            for i in xrange(3):
+            for i in range(3):
                 try:
                     self._ssl = wrap_socket(self._socket, self.key_file, self.cert_file)
                     break
-                except SSLError, ex:
+                except SSLError as ex:
                     if ex.args[0] == SSL_ERROR_WANT_READ:
                         sys.exc_clear()
                     elif ex.args[0] == SSL_ERROR_WANT_WRITE:
